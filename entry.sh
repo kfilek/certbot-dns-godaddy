@@ -36,7 +36,7 @@ stop() {
 }
 trap stop SIGINT SIGTERM
 
-certbot certonly $STAGING -n --agree-tos --email $REGISTER_EMAIL \
+certbot certonly $STAGING -n --agree-tos --email $REGISTER_EMAIL --manual-public-ip-logging-ok \
     --manual --preferred-challenges=dns --manual-auth-hook /authenticator.sh -d "*.$ROOT_DOMAIN" || exit 2
 
 while true
