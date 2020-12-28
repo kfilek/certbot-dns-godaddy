@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "$(date) Started ..."
+
 if [ "$API_KEY" == "" ]; then
     echo "API_KEY not set!"
     exit 1
@@ -31,7 +33,7 @@ if [ "$TEST" == "true" ]; then
 fi
 
 stop() {
-    echo "Received SIGINT or SIGTERM. Shutting down ..."
+    echo "$(date) Received SIGINT or SIGTERM. Shutting down ..."
     exit 0
 }
 trap stop SIGINT SIGTERM
@@ -42,9 +44,10 @@ certbot certonly $STAGING -n --agree-tos --email $REGISTER_EMAIL --manual-public
 while true
 do 
     # do renewals 1-2 times a day 
-    sleep $[ ( $RANDOM % 6 )  + 12 ]h
-    echo "Renewing ..."
+    sleep $[ ( $RANDOM % 6 )  + 12 ]h &
+    wait $!
+    echo "$(date) Renewing ..."
     certbot renew $STAGING
 done
 
-echo "Finished ..."
+echo "$(date) Finished ..."
